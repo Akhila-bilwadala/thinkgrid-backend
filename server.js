@@ -9,6 +9,7 @@ import roomRoutes from './routes/rooms.js';
 import materialRoutes from './routes/materials.js';
 import messageRoutes from './routes/messages.js';
 import exploreRoutes from './routes/explore.js';
+import postRoutes from './routes/posts.js';
 
 dotenv.config();
 
@@ -22,6 +23,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve uploads statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Routes
 app.use('/api/auth',      authRoutes);
 app.use('/api/users',     userRoutes);
@@ -29,6 +39,7 @@ app.use('/api/rooms',     roomRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/messages',  messageRoutes);
 app.use('/api/explore',   exploreRoutes);
+app.use('/api',           postRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'ThinkGrid API is running' });

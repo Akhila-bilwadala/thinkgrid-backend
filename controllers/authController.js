@@ -49,22 +49,28 @@ export const googleAuth = async (req, res) => {
 
 // ── Login ─────────────────────────────────────────────────────
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+  email = email?.toLowerCase().trim();
 
   try {
     // ✅ Find user in MongoDB
+    console.log(`[LOGIN_DEBUG] Querying for: ${email}`);
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.log(`[LOGIN_DEBUG] User NOT FOUND: ${email}`);
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     // ✅ Compare hashed password
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(`[LOGIN_DEBUG] Password match for ${email}: ${isMatch}`);
+    
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     const token = generateToken(user);
+    console.log(`[LOGIN_DEBUG] Login SUCCESS for ${email}`);
     res.json({ token, user });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -73,7 +79,8 @@ export const login = async (req, res) => {
 
 // ── Register ──────────────────────────────────────────────────
 export const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  let { name, email, password } = req.body;
+  email = email?.toLowerCase().trim();
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'All fields are required' });

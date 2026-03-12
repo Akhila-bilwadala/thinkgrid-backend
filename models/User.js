@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   name:     { type: String, required: true },
-  email:    { type: String, required: true, unique: true },
+  email:    { type: String, required: true, unique: true, lowercase: true, trim: true },
+  password: { type: String, select: false }, // ✅ Store hashed password, hide by default
   picture:  { type: String, default: '' },
   bio:      { type: String, default: '' },
   skills:   { type: [String], default: [] },

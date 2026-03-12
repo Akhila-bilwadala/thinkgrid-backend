@@ -34,19 +34,52 @@ export const getMaterial = async (req, res) => {
 
 // ── POST /api/materials ───────────────────────────────────────
 export const createMaterial = async (req, res) => {
-  const { title, type, tags, url, description, room } = req.body;
+  const { title, type, category, tags, url, description, room } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
-  if (!url)   return res.status(400).json({ error: 'URL is required' });
+  
+  let finalUrl = url;
+  let parsedTags = [];
+  let resources = [];
+  
+  if (tags) {
+      try {
+          parsedTags = typeof tags === 'string' ? JSON.parse(tags) : tags;
+      } catch (e) {
+          parsedTags = [tags];
+      }
+  }
+
+  if (req.file) {
+    finalUrl = `/uploads/materials/${req.file.filename}`;
+    
+    // Calculate size
+    const sizeInBytes = req.file.size;
+    const sizeStr = sizeInBytes > 1024 * 1024 
+      ? (sizeInBytes / (1024 * 1024)).toFixed(2) + ' MB'
+      : (sizeInBytes / 1024).toFixed(2) + ' KB';
+      
+    resources.push({
+      name: req.file.originalname,
+      type: 'PDF', // Assuming PDF for now based on context
+      size: sizeStr,
+      url: finalUrl
+    });
+  }
+
+  // Allow empty cards to be created without a file or url
+  // if (!finalUrl) return res.status(400).json({ error: 'URL or File is required' });
 
   try {
     const material = await Material.create({
       title,
       type:        type || 'document',
-      tags:        tags || [],
-      url,
+      category:    category || 'General',
+      tags:        parsedTags,
+      url:         finalUrl,
       description: description || '',
-      room:        room || null,
-      uploadedBy:  req.user.id, // ✅ from JWT
+      room:        room || undefined,
+      uploadedBy:  req.user.id,
+      resources:   resources,
       likes:       0,
       downloads:   0,
     });

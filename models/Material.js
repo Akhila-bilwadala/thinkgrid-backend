@@ -9,11 +9,12 @@ const materialSchema = new mongoose.Schema({
   resources:   [{ 
     name: String, 
     type: { type: String, default: 'PDF' }, 
-    size: String 
+    size: String,
+    url: String
   }],
   category:    { type: String, default: 'General' },
   uploadedBy:  { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // ✅ links to User
-  room:        { type: mongoose.Schema.Types.ObjectId, ref: 'Room', required: true }, // ✅ links to Room
+  room:        { type: mongoose.Schema.Types.ObjectId, ref: 'Room' }, // ✅ optional for global materials
   tags:        { type: [String], default: [] },
   likes:       { type: Number, default: 0 },
   downloads:   { type: Number, default: 0 },

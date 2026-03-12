@@ -10,12 +10,13 @@ import {
   unsaveMaterial
 } from '../controllers/materialController.js';
 import authMiddleware from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
 router.get('/',            authMiddleware, getMaterials);
 router.get('/:id',         authMiddleware, getMaterial);
-router.post('/',           authMiddleware, createMaterial);
+router.post('/',           authMiddleware, upload.single('file'), createMaterial);
 router.delete('/:id',      authMiddleware, deleteMaterial);
 router.put('/:id/like',    authMiddleware, likeMaterial);
 router.put('/:id/download',authMiddleware, downloadMaterial);
