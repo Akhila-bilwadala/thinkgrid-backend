@@ -3,7 +3,7 @@ import User from './models/User.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://thinkgrid:tg%402026@cluster0.rcaqje1.mongodb.net/?appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 
 async function run() {
     try {
