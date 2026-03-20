@@ -3,17 +3,21 @@ import {
   getProfile, 
   updateProfile, 
   getAllUsers,
-  getUser,      // ✅ add this
-  deleteUser    // ✅ add this
-} from '../controllers/userController.js'; // ✅ check filename (usersController vs userController)
+  getUser,
+  deleteUser,
+  uploadProfilePicture,
+  uploadBgPicture
+} from '../controllers/userController.js';
 import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/',          authMiddleware, getAllUsers);
-router.get('/profile',   authMiddleware, getProfile);
-router.put('/profile',   authMiddleware, updateProfile);
-router.get('/:id',       authMiddleware, getUser);    // ✅ new
-router.delete('/:id',    authMiddleware, deleteUser); // ✅ new
+router.get('/',                   authMiddleware, getAllUsers);
+router.get('/profile',            authMiddleware, getProfile);
+router.put('/profile',            authMiddleware, updateProfile);
+router.put('/profile/picture',    authMiddleware, uploadProfilePicture);
+router.put('/profile/bgpicture',  authMiddleware, uploadBgPicture);
+router.get('/:id',                authMiddleware, getUser);
+router.delete('/:id',             authMiddleware, deleteUser);
 
 export default router; // ✅ 

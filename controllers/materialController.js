@@ -14,6 +14,7 @@ export const getMaterials = async (req, res) => {
 
     res.json(materials);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -28,6 +29,7 @@ export const getMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found' });
     res.json(material);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -101,6 +103,7 @@ export const deleteMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found or unauthorized' });
     res.json({ message: 'Material deleted ✅' });
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -117,6 +120,7 @@ export const likeMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found' });
     res.json(material);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -133,6 +137,7 @@ export const downloadMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found' });
     res.json(material);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -148,6 +153,7 @@ export const saveMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found' });
     res.json(material);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };
@@ -163,6 +169,7 @@ export const unsaveMaterial = async (req, res) => {
     if (!material) return res.status(404).json({ error: 'Material not found' });
     res.json(material);
   } catch (err) {
+    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
     res.status(500).json({ message: err.message });
   }
 };

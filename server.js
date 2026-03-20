@@ -10,6 +10,7 @@ import materialRoutes from './routes/materials.js';
 import messageRoutes from './routes/messages.js';
 import exploreRoutes from './routes/explore.js';
 import postRoutes from './routes/posts.js';
+import labRoutes from './routes/labs.js';
 
 dotenv.config();
 
@@ -24,7 +25,8 @@ app.use(cors({
   ],
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +44,7 @@ app.use('/api/rooms',     roomRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/messages',  messageRoutes);
 app.use('/api/explore',   exploreRoutes);
+app.use('/api/labs',      labRoutes);
 app.use('/api',           postRoutes);
 
 app.get('/api/health', (req, res) => {

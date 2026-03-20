@@ -79,7 +79,7 @@ export const login = async (req, res) => {
 
 // ── Register ──────────────────────────────────────────────────
 export const register = async (req, res) => {
-  let { name, email, password } = req.body;
+  let { name, email, password, role, company } = req.body;
   email = email?.toLowerCase().trim();
 
   if (!name || !email || !password) {
@@ -100,6 +100,8 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role: role || 'Member',
+      company: company || 'ThinkGrid',
     });
 
     const token = generateToken(user);
