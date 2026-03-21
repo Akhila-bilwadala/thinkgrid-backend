@@ -66,7 +66,6 @@ app.use((err, req, res, next) => {
 mongoose.connect(process.env.MONGO_URI, {
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
-  family: 4, // ✅ force IPv4
 })
 .then(() => {
   console.log('✅ MongoDB Connected');
