@@ -30,6 +30,8 @@ const userSchema = new mongoose.Schema({
   experience: { type: [experienceSchema], default: [] },
   achievements: { type: [achievementSchema], default: [] },
   portfolioUrl: { type: String, default: '' },
+  linkedinUrl:  { type: String, default: '' },
+  githubUrl:    { type: String, default: '' },
   verified: { type: Boolean, default: false },
 }, { timestamps: true }); // ✅ auto adds createdAt & updatedAt
 

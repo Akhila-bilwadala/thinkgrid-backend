@@ -11,6 +11,7 @@ import messageRoutes from './routes/messages.js';
 import exploreRoutes from './routes/explore.js';
 import postRoutes from './routes/posts.js';
 import labRoutes from './routes/labs.js';
+import exchangeRoutes from './routes/exchanges.js';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use('/api/materials', materialRoutes);
 app.use('/api/messages',  messageRoutes);
 app.use('/api/explore',   exploreRoutes);
 app.use('/api/labs',      labRoutes);
+app.use('/api/exchanges', exchangeRoutes);
 app.use('/api',           postRoutes);
 
 app.get('/api/health', (req, res) => {

@@ -32,7 +32,7 @@ export const getProfile = async (req, res) => {
 // ── PUT /api/users/profile ────────────────────────────────────
 export const updateProfile = async (req, res) => {
   try {
-    const { name, bio, skills, role, company, experience, achievements, portfolioUrl } = req.body;
+    const { name, bio, skills, role, company, experience, achievements, portfolioUrl, linkedinUrl, githubUrl } = req.body;
 
     console.log('--- Incoming Profile Data ---');
     console.log('Type of experience:', typeof experience, Array.isArray(experience) ? 'is Array' : 'not Array');
@@ -40,7 +40,7 @@ export const updateProfile = async (req, res) => {
     
     let user = await User.findOneAndUpdate(
       { $or: [{ _id: req.user.id }, { email: req.user.email }] },
-      { name, bio, skills, role, company, experience, achievements, portfolioUrl },
+      { name, bio, skills, role, company, experience, achievements, portfolioUrl, linkedinUrl, githubUrl },
       { new: true }
     );
 
@@ -48,7 +48,7 @@ export const updateProfile = async (req, res) => {
       user = await findOrCreateUser(req.user);
       user = await User.findByIdAndUpdate(
         user._id,
-        { name, bio, skills, role, company, experience, achievements, portfolioUrl },
+        { name, bio, skills, role, company, experience, achievements, portfolioUrl, linkedinUrl, githubUrl },
         { new: true }
       );
     }
