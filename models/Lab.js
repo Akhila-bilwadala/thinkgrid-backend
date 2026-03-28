@@ -12,6 +12,7 @@ const labSchema = new mongoose.Schema({
   recruitDeadline: { type: Date }, // ✅ Added recruitment deadline
   status:      { type: String, enum: ['OPEN', 'CLOSED'], default: 'OPEN' },
   stars:       { type: Number, default: 0 },
+  isApproved:  { type: Boolean, default: false }, // ✅ Admin approval flag
   createdBy:   { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 

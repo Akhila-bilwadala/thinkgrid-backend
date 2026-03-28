@@ -11,6 +11,7 @@ const roomSchema = new mongoose.Schema({
   image:       { type: String, default: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80' },
   members:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // ✅ array of Users
   messages:    [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }], // ✅ links to Message
+  isApproved:  { type: Boolean, default: false }, // ✅ Admin approval flag
 }, { timestamps: true });
 
 export default mongoose.model('Room', roomSchema);

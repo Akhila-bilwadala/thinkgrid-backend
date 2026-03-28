@@ -19,6 +19,7 @@ const materialSchema = new mongoose.Schema({
   likes:       { type: Number, default: 0 },
   downloads:   { type: Number, default: 0 },
   savedBy:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // ✅ users who saved this
+  isApproved:  { type: Boolean, default: false }, // ✅ Admin approval flag
 }, { timestamps: true }); // ✅ auto adds createdAt & updatedAt
 
 export default mongoose.model('Material', materialSchema);

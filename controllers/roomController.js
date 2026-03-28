@@ -3,7 +3,7 @@ import Room from '../models/Room.js';
 // ── GET /api/rooms ────────────────────────────────────────────
 export const getRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({ isPrivate: false })
+    const rooms = await Room.find({ isPrivate: false, isApproved: true })
       .populate('createdBy', 'name picture')
       .populate('members', 'name picture');
     res.json(rooms);
@@ -52,6 +52,7 @@ export const createRoom = async (req, res) => {
       category:  category || 'General',
       createdBy: req.user.id,        // ✅ from JWT
       members:   [req.user.id],      // ✅ creator is first member
+      isApproved: false              // ⏳ requires admin approval
     });
 
     res.status(201).json(room);

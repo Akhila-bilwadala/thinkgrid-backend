@@ -155,23 +155,7 @@ export const downloadMaterial = async (req, res) => {
   }
 };
 
-// ── POST /api/materials/:id/save ──────────────────────────────
-export const saveMaterial = async (req, res) => {
-  try {
-    const material = await Material.findByIdAndUpdate(
-      req.params.id,
-      { $addToSet: { savedBy: req.user.id } },
-      { new: true }
-    );
-    if (!material) return res.status(404).json({ error: 'Material not found' });
-    res.json(material);
-  } catch (err) {
-    if (err.name === 'CastError') return res.status(404).json({ error: 'Material not found' });
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// ── POST /api/materials/:id/unsave ────────────────────────────
+// ── POST /api/materials/:id/save ────────────────────�// ── POST /api/materials/:id/unsave ────────────────────────────
 export const unsaveMaterial = async (req, res) => {
   try {
     const material = await Material.findByIdAndUpdate(

@@ -3,7 +3,7 @@ import Lab from '../models/Lab.js';
 // ── GET /api/labs ─────────────────────────────────────────────
 export const getLabs = async (req, res) => {
   try {
-    const labs = await Lab.find().sort({ createdAt: -1 });
+    const labs = await Lab.find({ isApproved: true }).sort({ createdAt: -1 });
     res.json(labs);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -29,6 +29,7 @@ export const createLab = async (req, res) => {
       hostEmail,
       recruitDeadline, // ✅ Store deadline
       createdBy:   req.user?.id,
+      isApproved:  false, // ⏳ requires admin approval
     });
 
     res.status(201).json(lab);
