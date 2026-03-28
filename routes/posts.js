@@ -27,7 +27,14 @@ router.get('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
 // POST create a new post in a room
 router.post('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
   const { title, text, tag } = req.body;
-  if (!text) return res.status(400).json({ error: 'Text is required' });
+  console.log(`[POST_DEBUG] Request to create post in room: ${req.params.roomId}`);
+  console.log(`[POST_DEBUG] Title: ${title}, Tag: ${tag}`);
+  console.log(`[POST_DEBUG] User: ${req.user.id} (${req.user.name})`);
+  
+  if (!text) {
+    console.log(`[POST_DEBUG] ERROR: Text is required`);
+    return res.status(400).json({ error: 'Text is required' });
+  }
   try {
     const post = await Post.create({
       room:       req.params.roomId,
