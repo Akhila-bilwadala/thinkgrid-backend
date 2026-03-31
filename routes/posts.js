@@ -1,6 +1,7 @@
 import express from 'express';
 import Post from '../models/Post.js';
 import authMiddleware from '../middleware/auth.js';
+import uploadPost from '../middleware/uploadPost.js';
 
 const router = express.Router();
 
@@ -17,7 +18,10 @@ router.get('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
       ];
     }
 
-    const posts = await Post.find(query).sort({ isPinned: -1, createdAt: -1 });
+    const posts = await Post.find(query)
+      .populate('author', 'name picture role')
+      .populate('replies.author', 'name picture role')
+      .sort({ isPinned: -1, createdAt: -1 });
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -25,16 +29,29 @@ router.get('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
 });
 
 // POST create a new post in a room
-router.post('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
+router.post('/rooms/:roomId/posts', [authMiddleware, uploadPost.single('image')], async (req, res) => {
   const { title, text, tag } = req.body;
-  console.log(`[POST_DEBUG] Request to create post in room: ${req.params.roomId}`);
-  console.log(`[POST_DEBUG] Title: ${title}, Tag: ${tag}`);
-  console.log(`[POST_DEBUG] User: ${req.user.id} (${req.user.name})`);
   
   if (!text) {
-    console.log(`[POST_DEBUG] ERROR: Text is required`);
-    return res.status(400).json({ error: 'Text is required' });
+    console.error('DEBUG: Post creation failed - Missing "text" field');
+    console.error('Headers:', JSON.stringify(req.headers, null, 2));
+    console.error('Body Keys:', Object.keys(req.body));
+    console.error('Raw Body (truncated):', JSON.stringify(req.body).substring(0, 500));
+    
+    return res.status(400).json({ 
+      error: 'Text is required',
+      debug: {
+        bodyKeys: Object.keys(req.body),
+        contentType: req.headers['content-type']
+      }
+    });
   }
+
+  let imageUrl = null;
+  if (req.file) {
+    imageUrl = `/uploads/posts/${req.file.filename}`;
+  }
+
   try {
     const post = await Post.create({
       room:       req.params.roomId,
@@ -43,8 +60,11 @@ router.post('/rooms/:roomId/posts', authMiddleware, async (req, res) => {
       title,
       text,
       tag: tag || 'Discussion',
+      image: imageUrl,
     });
-    res.status(201).json(post);
+    
+    const populatedPost = await Post.findById(post._id).populate('author', 'name picture role');
+    res.status(201).json(populatedPost);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -89,7 +109,12 @@ router.post('/rooms/:roomId/posts/:postId/reply', authMiddleware, async (req, re
       { new: true }
     );
     if (!post) return res.status(404).json({ error: 'Post not found' });
-    res.json(post);
+    
+    const populatedPost = await Post.findById(post._id)
+      .populate('author', 'name picture role')
+      .populate('replies.author', 'name picture role');
+
+    res.json(populatedPost);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

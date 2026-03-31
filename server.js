@@ -13,6 +13,7 @@ import postRoutes from './routes/posts.js';
 import labRoutes from './routes/labs.js';
 import exchangeRoutes from './routes/exchanges.js';
 import adminRoutes from './routes/admin.js';
+import aiRoutes from './routes/ai.js';
 
 
 
@@ -56,7 +57,13 @@ app.use('/api/explore',   exploreRoutes);
 app.use('/api/labs',      labRoutes);
 app.use('/api/exchanges', exchangeRoutes);
 app.use('/api/admin',     adminRoutes);
+app.use('/api/ai',        aiRoutes);
 app.use('/api',           postRoutes);
+
+// Root Status Route
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'ThinkGrid API is Live ✅', version: '2.0.0 (Gemini 1.5 Pro Enabled)' });
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'ThinkGrid API is running' });

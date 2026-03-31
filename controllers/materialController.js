@@ -221,7 +221,7 @@ export const chatWithMaterial = async (req, res) => {
     }
 
     // Step 2: Generate Content
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
     const result = await model.generateContent([
         { fileData: { mimeType: file.mimeType, fileUri: file.uri } },
         { text: `You are a helpful study assistant. Use the provided document to answer the student's question accurately. Focus on being clear and helpful.\n\nQuestion: ${question}` }
@@ -283,7 +283,7 @@ export const askPdf = async (req, res) => {
             return res.status(400).json({ error: 'Missing file URI or question' });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
         const result = await model.generateContent([
             {
                 fileData: {

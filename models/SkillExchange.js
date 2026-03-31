@@ -21,11 +21,19 @@ const skillExchangeSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['pending', 'accepted', 'scheduled', 'completed', 'cancelled'], 
+    enum: ['pending', 'accepted', 'reschedule_requested', 'scheduled', 'completed', 'cancelled'], 
     default: 'pending' 
   },
   scheduleDate: { 
     type: Date 
+  },
+  durationMinutes: {
+    type: Number,
+    default: 60
+  },
+  proposedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
   meetingLink: { 
     type: String, 

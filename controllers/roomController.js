@@ -52,7 +52,7 @@ export const createRoom = async (req, res) => {
       category:  category || 'General',
       createdBy: req.user.id,        // ✅ from JWT
       members:   [req.user.id],      // ✅ creator is first member
-      isApproved: false              // ⏳ requires admin approval
+      isApproved: true               // ✅ Auto-approve rooms for common access
     });
 
     res.status(201).json(room);

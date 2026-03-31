@@ -13,8 +13,10 @@ const postSchema = new mongoose.Schema({
   authorName: { type: String, required: true },
   title:      { type: String, default: '' },
   text:       { type: String, required: true },
+  image:      { type: String }, // ✅ For attachments
   tag:        { type: String, default: 'Discussion' }, // 'Discussion', 'Question', 'Update', 'Tech Update', 'Fix/Help'
   isPinned:   { type: Boolean, default: false },
+  isApproved: { type: Boolean, default: true },
   likedBy:    [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   replies:    [replySchema],
 }, { timestamps: true });

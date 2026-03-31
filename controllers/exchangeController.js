@@ -24,7 +24,9 @@ export const createExchangeRequest = async (req, res) => {
       sender: senderId,
       receiver: receiverId,
       topic,
-      credits
+      credits,
+      scheduleDate: req.body.scheduleDate,
+      proposedBy: senderId
     });
 
     // Populate sender name for the email
@@ -74,6 +76,17 @@ export const updateExchangeStatus = async (req, res) => {
     if (scheduleDate) exchange.scheduleDate = scheduleDate;
     if (rating !== undefined) exchange.rating = rating;
     if (review !== undefined) exchange.review = review;
+
+    // Track negotiation
+    if (status === 'reschedule_requested' || scheduleDate) {
+      exchange.proposedBy = req.user.id;
+    }
+
+    // Auto-generate Google Meet link when finalized
+    if (status === 'scheduled' && !exchange.meetingLink) {
+      const randomId = Math.random().toString(36).substring(2, 12);
+      exchange.meetingLink = `https://meet.google.com/${randomId.slice(0,3)}-${randomId.slice(3,7)}-${randomId.slice(7)}`;
+    }
 
     await exchange.save();
 
