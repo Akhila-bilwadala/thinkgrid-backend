@@ -5,8 +5,8 @@ const labSchema = new mongoose.Schema({
   description: { type: String, required: true },
   repoUrl:     { type: String, default: '' },
   maxMembers:  { type: Number, default: 5 },
-  members:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // ✅ Changed to array
-  pendingMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // ✅ Added pending list
+  members: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] },
+  pendingMembers: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] },
   tags:        { type: [String], default: [] },
   host:        { type: String, required: true },
   hostEmail:   { type: String, required: true },

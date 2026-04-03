@@ -65,14 +65,19 @@ export const requestToJoin = async (req, res) => {
     const lab = await Lab.findById(req.params.id);
     if (!lab) return res.status(404).json({ message: 'Project not found' });
     
-    if (lab.members.includes(req.user.id) || lab.pendingMembers.includes(req.user.id)) {
+    const members = lab.members || [];
+    const pendingMembers = lab.pendingMembers || [];
+    
+    if (members.some(m => m.toString() === req.user.id) || 
+        pendingMembers.some(pm => pm.toString() === req.user.id)) {
       return res.status(400).json({ message: 'Already a member or requested' });
     }
 
-    if (lab.members.length >= lab.maxMembers) {
+    if (members.length >= (lab.maxMembers || 5)) {
       return res.status(400).json({ message: 'Project is full' });
     }
 
+    if (!lab.pendingMembers) lab.pendingMembers = [];
     lab.pendingMembers.push(req.user.id);
     await lab.save();
     res.json({ message: 'Join request sent! ✅' });
@@ -93,16 +98,19 @@ export const approveMember = async (req, res) => {
     }
 
     const { userId } = req.params;
-    if (!lab.pendingMembers.includes(userId)) {
+    const pendingMembers = lab.pendingMembers || [];
+    if (!pendingMembers.some(id => id.toString() === userId)) {
       return res.status(400).json({ message: 'User not in pending list' });
     }
 
-    if (lab.members.length >= lab.maxMembers) {
+    const members = lab.members || [];
+    if (members.length >= (lab.maxMembers || 5)) {
       return res.status(400).json({ message: 'Project capacity reached' });
     }
 
     // Move from pending to members
-    lab.pendingMembers = lab.pendingMembers.filter(id => id.toString() !== userId);
+    lab.pendingMembers = (lab.pendingMembers || []).filter(id => id.toString() !== userId);
+    if (!lab.members) lab.members = [];
     lab.members.push(userId);
     await lab.save();
 

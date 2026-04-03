@@ -13,6 +13,7 @@ import postRoutes from './routes/posts.js';
 import labRoutes from './routes/labs.js';
 import exchangeRoutes from './routes/exchanges.js';
 import adminRoutes from './routes/admin.js';
+import newsRoutes from './routes/news.js';
 import aiRoutes from './routes/ai.js';
 
 
@@ -57,6 +58,7 @@ app.use('/api/explore',   exploreRoutes);
 app.use('/api/labs',      labRoutes);
 app.use('/api/exchanges', exchangeRoutes);
 app.use('/api/admin',     adminRoutes);
+app.use('/api/news',      newsRoutes);
 app.use('/api/ai',        aiRoutes);
 app.use('/api',           postRoutes);
 
